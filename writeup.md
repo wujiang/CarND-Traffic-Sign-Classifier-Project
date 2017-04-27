@@ -46,11 +46,25 @@ the distribution of the features.
 
 #### 1. Describe how you preprocessed the image data. What techniques were chosen and why did you choose these techniques? Consider including images showing the output of each preprocessing technique. Pre-processing refers to techniques such as converting to grayscale, normalization, etc. (OPTIONAL: As described in the "Stand Out Suggestions" part of the rubric, if you generated additional data for training, describe why you decided to generate additional data, how you generated the data, and provide example images of the additional data. Then describe the characteristics of the augmented training set like number of images in the set, number of images for each class, etc.)
 
-As a first step, I decided to convert the images to grayscale because:
+1. thanks to Paul's suggestion, I managed to enlarge the training set by 2 times
+   by adding augmented images. For each original image, I added 5 more augmented
+   images. I used the code from https://github.com/vxy10/ImageAugmentation to
+   alter the image rotation, alter brightness, and get partial images from the
+   original images. Adding more training data with different varianties can make
+   the model more robust and gain better results. Example
+   images:
 
-- different color channels do not matter much for CNN
-- reduce the data size
-- the drop-in LaNet uses 1 channel
+   - original:
+   ![original images](assets/original.png) 
+   
+   - augmented:
+   ![augmented images](assets/augmented.png)
+
+2. turn the images into grayscale
+  - different color channels do not matter much for CNN
+  - reduce the data size
+  - the drop-in LaNet uses 1 channel
+3. apply normalization
 
 Here is an example of a traffic sign image before and after grayscaling.
 
@@ -86,15 +100,22 @@ My final model consisted of the following layers:
 #### 3. Describe how you trained your model. The discussion can include the type of optimizer, the batch size, number of epochs and any hyperparameters such as learning rate.
 
 To train the model, I used an the LeNet5 from the class. Only modified the
-`EPOCHS` and `BATCH_SIZE` to improve the results.
+`EPOCHS` and `BATCH_SIZE` to improve the results. 
+
+- optimizer is Adam optimizer
+- learing rate equal 0.001 
+- batch size is 100
+- number of epochs is between 10 and 50. It will terminate if the validation
+  accuracy variance for the latest 5 epochs is smaller than 0.0000001 (a random
+  small number).
 
 #### 4. Describe the approach taken for finding a solution and getting the validation set accuracy to be at least 0.93. Include in the discussion the results on the training, validation and test sets and where in the code these were calculated. Your approach may have been an iterative process, in which case, outline the steps you took to get to the final solution and why you chose those steps. Perhaps your solution involved an already well known implementation or architecture. In this case, discuss why you think the architecture is suitable for the current problem.
 
 My final model results were:
 
-- training set accuracy of 1.0
-- validation set accuracy of 0.941
-- test set accuracy of 0.927
+- training set accuracy of 0.992
+- validation set accuracy of 0.939
+- test set accuracy of 0.923
 
 If an iterative approach was chosen:
 
@@ -142,8 +163,6 @@ Here are five German traffic signs that I found on the web:
 ![2](test_images/2.jpeg)
 ![4](test_images/4.jpeg)
 
-None of these images should be hard to classify but the last one always fails.
-Not sure why.
 
 #### 2. Discuss the model's predictions on these new traffic signs and compare the results to predicting on the test set. At a minimum, discuss what the predictions were, the accuracy on these new predictions, and compare the accuracy to the accuracy on the test set (OPTIONAL: Discuss the results in more detail as described in the "Stand Out Suggestions" part of the rubric).
 
@@ -158,23 +177,15 @@ Here are the results of the prediction:
 | Speed limit (70km/h)	| Speed limit (20km/h)                          |
 
 
-The model was able to correctly guess 4 of the 5 traffic signs, which gives an
-accuracy of 80%. This compares favorably to the accuracy on the test set of
-92.7%.
+The model was able to correctly guess 4 out of the 5 traffic signs, which gives
+an accuracy of 80%. This compares favorably to the accuracy on the test set of
+92.3%. The reason is that Speed limit (70km/h) has a background with many
+different colors forms some patterns.
 
 #### 3. Describe how certain the model is when predicting on each of the five new images by looking at the softmax probabilities for each prediction. Provide the top 5 softmax probabilities for each image along with the sign type of each probability. (OPTIONAL: as described in the "Stand Out Suggestions" part of the rubric, visualizations can also be provided such as bar charts)
 
-For the first image, the model is relatively sure that this is a stop sign
-(probability of 0.6), and the image does contain a stop sign. The top five soft
-max probabilities were
+![softmax](assets/softmax.png)
 
-| Probability         	|     Prediction	        					| 
-|:---------------------:|:---------------------------------------------:| 
-| 1         			| Stop sign   									| 
-| 1     				| No entry                                      |
-| 1					    | Children crossing								|
-| 1  	      			| Speed limit (50km/h)                          |
-| 1  	      			| Speed limit (20km/h)                          |
 
 
 ### (Optional) Visualizing the Neural Network (See Step 4 of the Ipython notebook for more details)
